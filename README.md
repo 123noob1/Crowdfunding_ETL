@@ -16,15 +16,15 @@ In the next portion of the assignment, the main excel file, crowdfunding.xlsx, w
 In the next portion of the assignment, a new dataframe was created to hold data on contacts. The original contacts spreadsheet had the data formatted as json. So the json data was imported and converted into a multicolumn dataframe. The dataframe was then cleaned and expored back into an excel file. Even though we were only required to do this processes using one of two approaches, we ultimately completed this portion using both techniques. 
 The final portion of the project ties all of the previously created spreadsheets together. In order to make sense of all the data collectively, an ERD was created to show the cross-over constructs amongst all of the excel files. A database schema was created for SQL, and the data were loaded into a database named crowdfunding_db.
 
-### Database Creation & Running Instructions:
-#### Creating employees_db and tables:
+## Database Creation & Running Instructions:
+### Creating employees_db and tables:
 Create a new database named <code>crowdfunding_db</code> then open and run the <code>crowdfunding_db_schema.sql</code> to create the following tables:
 - contacts
 - category
 - subcategory
 - campaign
 
-#### Importing:
+### Importing:
 Start by importing the <code>csv</code> files that do not have any dependencies in the following order:
 1) <code>contacts.csv</code> to <code>contacts</code> table
 2) <code>category.csv</code> to <code>category</code> table
@@ -33,5 +33,5 @@ Start by importing the <code>csv</code> files that do not have any dependencies 
 Once the above files have been imported, the following <code>csv</code> file can be imported into their tables in any order:
 - <code>campaign.csv</code> to <code>campaign</code> table
 
-#### Querying:
+### Querying:
 Open and run each query for each question from the <code>crowdfunding_select_queries.sql</code> file.
