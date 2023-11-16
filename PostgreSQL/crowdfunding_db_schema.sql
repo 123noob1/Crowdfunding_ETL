@@ -1,81 +1,65 @@
-﻿-- Exported from QuickDBD: https://www.quickdatabasediagrams.com/
+-- Exported from QuickDBD: https://www.quickdatabasediagrams.com/
+-- Link to schema: https://app.quickdatabasediagrams.com/#/d/VmCKE1
 -- NOTE! If you have used non-SQL datatypes in your design, you will have to change these here.
 
--- Modify this code to update the DB schema diagram.
--- To reset the sample schema, replace everything with
--- two dots ('..' - without quotes).
+-- Drop tables if rerunning this, starting with the ones with dependencies
+DROP TABLE IF EXISTS contacts;
+DROP TABLE IF EXISTS category;
+DROP TABLE IF EXISTS subcategory;
+DROP TABLE IF EXISTS campaign;
 
-CREATE TABLE "Customer" (
-    "CustomerID" int   NOT NULL,
-    "Name" string   NOT NULL,
-    "Address1" string   NOT NULL,
-    "Address2" string   NULL,
-    "Address3" string   NULL,
-    CONSTRAINT "pk_Customer" PRIMARY KEY (
-        "CustomerID"
+CREATE TABLE contacts (
+    contact_id int   NOT NULL,
+    first_name VARCHAR(50)   NOT NULL,
+    last_name VARCHAR(50)   NOT NULL,
+    email VARCHAR(255)   NOT NULL,
+    CONSTRAINT pk_contacts PRIMARY KEY (
+        contact_id
      )
 );
 
-CREATE TABLE "Order" (
-    "OrderID" int   NOT NULL,
-    "CustomerID" int   NOT NULL,
-    "TotalAmount" money   NOT NULL,
-    "OrderStatusID" int   NOT NULL,
-    CONSTRAINT "pk_Order" PRIMARY KEY (
-        "OrderID"
+CREATE TABLE category (
+    category_id VARCHAR(5)   NOT NULL,
+    category VARCHAR(50)   NOT NULL,
+    CONSTRAINT pk_category PRIMARY KEY (
+        category_id
      )
 );
 
-CREATE TABLE "OrderLine" (
-    "OrderLineID" int   NOT NULL,
-    "OrderID" int   NOT NULL,
-    "ProductID" int   NOT NULL,
-    "Quantity" int   NOT NULL,
-    CONSTRAINT "pk_OrderLine" PRIMARY KEY (
-        "OrderLineID"
+CREATE TABLE subcategory (
+    subcategory_id VARCHAR(10)   NOT NULL,
+    subcategory VARCHAR(50)   NOT NULL,
+    CONSTRAINT pk_subcategory PRIMARY KEY (
+        subcategory_id
      )
 );
 
--- Table documentation comment 1 (try the PDF/RTF export)
--- Table documentation comment 2
-CREATE TABLE "Product" (
-    "ProductID" int   NOT NULL,
-    -- Field documentation comment 1
-    -- Field documentation comment 2
-    -- Field documentation comment 3
-    "Name" varchar(200)   NOT NULL,
-    "Price" money   NOT NULL,
-    CONSTRAINT "pk_Product" PRIMARY KEY (
-        "ProductID"
-     ),
-    CONSTRAINT "uc_Product_Name" UNIQUE (
-        "Name"
-    )
+CREATE TABLE campaign (
+    cf_id INT   NOT NULL,
+    contact_id INT   NOT NULL,
+    company_name VARCHAR(255)   NOT NULL,
+    description VARCHAR(255)   NOT NULL,
+    goal numeric(9,2)   NOT NULL,
+    pledged numeric(9,2)   NOT NULL,
+    outcome VARCHAR(50)   NOT NULL,
+    backers_count INT   NOT NULL,
+    country VARCHAR(50)   NOT NULL,
+    currency VARCHAR(10)   NOT NULL,
+    launch_date date   NOT NULL,
+    end_date date   NOT NULL,
+    category_id VARCHAR(5)   NOT NULL,
+    subcategory_id VARCHAR(10)   NOT NULL,
+    CONSTRAINT pk_campaign PRIMARY KEY (
+        cf_id
+     )
 );
 
-CREATE TABLE "OrderStatus" (
-    "OrderStatusID" int   NOT NULL,
-    "Name" string   NOT NULL,
-    CONSTRAINT "pk_OrderStatus" PRIMARY KEY (
-        "OrderStatusID"
-     ),
-    CONSTRAINT "uc_OrderStatus_Name" UNIQUE (
-        "Name"
-    )
-);
+ALTER TABLE campaign ADD CONSTRAINT fk_campaign_contact_id FOREIGN KEY(contact_id)
+REFERENCES contacts (contact_id);
 
-ALTER TABLE "Order" ADD CONSTRAINT "fk_Order_CustomerID" FOREIGN KEY("CustomerID")
-REFERENCES "Customer" ("CustomerID");
+ALTER TABLE campaign ADD CONSTRAINT fk_campaign_category_id FOREIGN KEY(category_id)
+REFERENCES category (category_id);
 
-ALTER TABLE "Order" ADD CONSTRAINT "fk_Order_OrderStatusID" FOREIGN KEY("OrderStatusID")
-REFERENCES "OrderStatus" ("OrderStatusID");
-
-ALTER TABLE "OrderLine" ADD CONSTRAINT "fk_OrderLine_OrderID" FOREIGN KEY("OrderID")
-REFERENCES "Order" ("OrderID");
-
-ALTER TABLE "OrderLine" ADD CONSTRAINT "fk_OrderLine_ProductID" FOREIGN KEY("ProductID")
-REFERENCES "Product" ("ProductID");
-
-CREATE INDEX "idx_Customer_Name"
-ON "Customer" ("Name");
+ALTER TABLE campaign ADD CONSTRAINT fk_campaign_subcategory_id FOREIGN KEY(subcategory_id)
+REFERENCES subcategory (subcategory_id);
 
